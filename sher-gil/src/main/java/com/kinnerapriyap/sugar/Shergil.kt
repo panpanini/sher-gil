@@ -8,7 +8,7 @@ import androidx.fragment.app.Fragment
 import com.kinnerapriyap.sugar.ShergilActivity.Companion.RESULT_URIS
 import com.kinnerapriyap.sugar.choice.ChoiceBuilder
 
-open class Shergil {
+class Shergil {
 
     companion object {
         /**
@@ -33,6 +33,9 @@ open class Shergil {
          */
         fun create(fragment: Fragment) =
             ChoiceBuilder(fragment)
+
+        fun create() =
+            ChoiceBuilder()
 
         /**
          * Get list of [Uri] for selected media

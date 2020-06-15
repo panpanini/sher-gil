@@ -1,9 +1,13 @@
 package com.kinnerapriyap.sugar.choice
 
 import android.app.Activity
+import android.content.Context
 import android.content.Intent
+import android.net.Uri
+import androidx.activity.result.contract.ActivityResultContract
 import androidx.fragment.app.Fragment
 import com.kinnerapriyap.sugar.R
+import com.kinnerapriyap.sugar.Shergil
 import com.kinnerapriyap.sugar.ShergilActivity
 
 class ChoiceBuilder private constructor(
@@ -14,6 +18,7 @@ class ChoiceBuilder private constructor(
 
     constructor(activity: Activity) : this(activity, null)
     constructor(fragment: Fragment) : this(fragment.activity, fragment)
+    constructor() : this(null, null)
 
     /**
      * Selects the MIME types allowed to be chosen by the user
@@ -104,7 +109,7 @@ class ChoiceBuilder private constructor(
      *
      * @param requestCode Request code to be returned in onActivityResult
      */
-    fun withRequestCode(requestCode: Int) {
+    fun withRequestCode(requestCode: Int): Unit {
         val activity = activity ?: return
         val intent = Intent(activity, ShergilActivity::class.java)
         with(fragment) {
@@ -112,4 +117,15 @@ class ChoiceBuilder private constructor(
             else activity.startActivityForResult(intent, requestCode)
         }
     }
+
+    fun forActivityContract() =
+        object: ActivityResultContract<Unit, List<Uri>>() {
+            override fun createIntent(context: Context, input: Unit?): Intent {
+                return Intent(context, ShergilActivity::class.java)
+            }
+
+            override fun parseResult(resultCode: Int, intent: Intent?): List<Uri> {
+                return Shergil.getMediaUris(intent)
+            }
+        }
 }
